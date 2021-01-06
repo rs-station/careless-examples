@@ -1,9 +1,9 @@
 ### Merging Serial XFEL Data with Careless
 
-The data in `careless/examples/thermolysin_xfel` are serial crystallography data from thermolysin microcrystals. 
+The data in `careless-examples/thermolysin_xfel` are serial crystallography data from thermolysin microcrystals. 
 The parent experiment of these data is freely available at the [CXIDB](https://cxidb.org/id-81.html). 
 Because the original data set is very large, this example deals with a single run containing 3,160 images.
-The unmerged reflections, stored in `careless/examples/thermolysin_xfel/unmerged.mtz` were prepared with a custom `cctbx` [script](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz). 
+The unmerged reflections, stored in `careless-examples/thermolysin_xfel/unmerged.mtz` were prepared with a custom `cctbx` [script](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz). 
 
 
 Enter the thermolysin directory and use [reciprocalspaceship](https://github.com/hekstra-lab/reciprocalspaceship) to explore the contents of this mtz file. 
