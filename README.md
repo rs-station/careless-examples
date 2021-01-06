@@ -7,7 +7,7 @@ To download the examples, run
 ```bash
 git clone https://github.com/Hekstra-Lab/careless-examples
 ```
-or simply use the download link at the top of this page. 
+or [download](https://github.com/Hekstra-Lab/careless-examples/archive/main.zip) the examples as a `.zip` archive.
 
 ## Examples
 - [room temp SAD phasing for lysozyme](HEWLSSAD.md)
