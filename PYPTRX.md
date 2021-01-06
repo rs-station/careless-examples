@@ -6,7 +6,7 @@ The data set consisted of 20 dark images and 20 images which were acquired 2ms a
 For starters, let's enter the data directory and have a look around. 
 Type 
 ```bash
-cd [Path to your careless installation]/examples/pyp
+cd careless-examples/pyp
 ls -R
 ```
 

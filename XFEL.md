@@ -9,7 +9,7 @@ The unmerged reflections, stored in `careless/examples/thermolysin_xfel/unmerged
 Enter the thermolysin directory and use [reciprocalspaceship](https://github.com/hekstra-lab/reciprocalspaceship) to explore the contents of this mtz file. 
 
 ```bash
-cd careless/examples/thermolysin_xfel
+cd careless-examples/thermolysin_xfel
 rs.mtzdump unmerged.mtz
 ```
 The output will look like this:
