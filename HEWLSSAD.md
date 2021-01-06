@@ -1,7 +1,7 @@
 ### Robust Merging for Sulfur SAD
 This example shows how to process conventional data with `careless`. 
 The data set is hen egg white lysozyme room temperature collected at the Advanced Photon Source [beamline 24-ID C](https://necat.chem.cornell.edu/newsite/technical-specifications-24-id-c-beamline).
-In total, 1,440 images procesed with [DIALS](https://dials.github.io/) yielded 411,944 reflections which are saved in `careless/examples/hewl_sad`.
+In total, 1,440 images procesed with [DIALS](https://dials.github.io/) yielded 411,944 reflections which are saved in `careless-examples/hewl_sad`.
 These data were collected at low energy, roughly 6.5 keV, and contain substantial sulfur anomalous signal. 
 However, there are many outliers in this data set owing to the presence of a shadow on the detector as well as contamination from a higher energy undulator harmonic.
 
