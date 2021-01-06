@@ -8,7 +8,7 @@ The script merges X-ray data using [reciprocalspaceship](https://github.com/heks
 To run the script, first enter the careless zero directory,
 
 ```bash
-cd {path to installation}/careless/examples/careless_zero
+cd careless-examples/careless_zero
 ```
 and type
 
