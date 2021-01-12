@@ -1,5 +1,5 @@
 # careless-examples
-Examples accompanying the [`careless`](https://github.com/hekstra-lab/careless) paper. 
+Examples accompanying the [`careless`](https://github.com/hekstra-lab/careless) [preprint](https://doi.org/10.1101/2021.01.05.425510). 
 
 ## Installation
 If you haven't already, follow the instructions on the [readme](https://github.com/hekstra-lab/careless) to install `careless`.
