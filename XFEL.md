@@ -52,7 +52,7 @@ PARTIAL              bool
 dtype: object                                                                     
 ```
 
-This mtz has an extra column from the [stills2mtz](../scripts/stills2mtz) script, `Ewald_offset`. 
+This mtz has an extra column from the [stills2mtz](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz) script, `Ewald_offset`. 
 This contains the magnitude of the Ewald offset vector between the observed reflection centroids and their centroids in reciprocal space. 
 These are in a crystal-fixed cartesian [coordinate system](https://dials.github.io/documentation/conventions.html). 
 Because we're dealing with still images here, each of the reflections have partial intensities which are dictated by how far away from the ideal Bragg contition they fall. 
