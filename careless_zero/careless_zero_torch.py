@@ -43,16 +43,93 @@ steps=10000
 n_layers = 20
 mc_samples = 3
 
+class FoldedNormalPosterior(torch.nn.Module):
+    def __init__(self, loc_init, scale_init, loc_bijector=None, scale_bijector=None):
+        super().__init__()
+        self._loc   = torch.nn.Parameter(  loc_init, requires_grad=True)
+        self._scale = torch.nn.Parameter(scale_init, requires_grad=True)
+
+        if loc_bijector is None:
+            loc_bijector = torch.nn.Softplus()
+        self.loc_bijector = loc_bijector
+        
+        if scale_bijector is None:
+            scale_bijector = torch.nn.Softplus()
+        self.scale_bijector = scale_bijector
+
+    @property
+    def loc(self):
+        return self.loc_bijector(self._loc)
+
+    @property
+    def scale(self):
+        return self.scale_bijector(self._scale)
+
+    @property
+    def base_dist(self):
+        return td.Normal(self.loc, self.scale)
+
+    @property
+    def dist(self):
+        from pyro.distributions import FoldedDistribution
+        return FoldedDistribution(self.base_dist)
+
+    @property
+    def mean(self):
+        return self.dist.mean
+
+    @property
+    def stddev(self):
+        return self.dist.stddev
+
+    def rsample(self, *args, **kwargs):
+        return self.dist.rsample(*args, **kwargs)
+
+    def log_prob(self, value):
+        return self.dist.log_prob(value)
+
+class WilsonPrior(torch.nn.Module):
+    def __init__(self, centric, multiplicity):
+        super().__init__()
+        self.centric      = torch.nn.Parameter(     centric, requires_grad=False)
+        self.multiplicity = torch.nn.Parameter(multiplicity, requires_grad=False)
+
+    @property
+    def p_acentric(self):
+        return td.Weibull(2., torch.sqrt(self.multiplicity))
+
+    @property
+    def p_centric(self):
+        return td.HalfNormal(self.multiplicity)
+
+    def log_prob(self, value):
+        return torch.where(
+            self.centric, 
+            self.p_centric.log_prob(value), 
+            self.p_acentric.log_prob(value)
+            )
+
+    @property
+    def mean(self):
+        return torch.where(
+            self.centric, 
+            self.p_centric.mean, 
+            self.p_acentric.mean,
+            )
+
+    @property
+    def stddev(self):
+        return torch.where(
+            self.centric, 
+            self.p_centric.stddev, 
+            self.p_acentric.stddev,
+            )
 
 class VariationalMergingModel(torch.nn.Module):
-    def __init__(self, centric, multiplicity, miller_id, metadata, intensities, uncertainties, n_layers=20):
+    def __init__(self, surrogate_posterior, prior, n_layers=20):
         super().__init__()
-        self.centric       = torch.nn.Parameter(centric       , requires_grad=False)
-        self.multiplicity  = torch.nn.Parameter(multiplicity  , requires_grad=False)
-        self.miller_id     = torch.nn.Parameter(miller_id     , requires_grad=False)
-        self.metadata      = torch.nn.Parameter(metadata      , requires_grad=False)
-        self.intensities   = torch.nn.Parameter(intensities   , requires_grad=False)
-        self.uncertainties = torch.nn.Parameter(uncertainties , requires_grad=False)
+        self.surrogate_posterior = surrogate_posterior
+        self.prior = prior
 
         #Construct scale function
         n,d = metadata.shape
@@ -63,60 +140,44 @@ class VariationalMergingModel(torch.nn.Module):
         layers.append(torch.nn.Linear(d, 2))
         self.NN = torch.nn.Sequential(*layers)
 
-        #Construct variational distributions
-        loc_init   = torch.where(centric, self.p_centric.mean, self.p_acentric.mean)
-        scale_init = torch.where(centric, self.p_centric.stddev, self.p_acentric.stddev)
+    def likelihood(self, intensities, uncertainties):
+        return td.Normal(loc=intensities, scale=uncertainties)
 
-        self.loc   = torch.nn.Parameter(  loc_init, requires_grad=True)
-        self.scale = torch.nn.Parameter(scale_init, requires_grad=True)
-
-    @property
-    def p_acentric(self):
-        return td.Weibull(2., torch.sqrt(self.multiplicity))
-
-    @property
-    def p_centric(self):
-        return td.HalfNormal(self.multiplicity)
-
-    @property
-    def likelihood(self):
-        return td.Normal(loc=self.intensities, scale=self.uncertainties)
-
-    @property
-    def q(self):
-        base_q = td.Normal(
-            td.transform_to(td.constraints.positive)(self.loc),
-            self.scale,
-        )
-        from pyro.distributions import FoldedDistribution
-        q = FoldedDistribution(base_q)
-        return q
-
-    def minus_elbo(self, mc_samples):
-        q = self.q
+    def minus_elbo(self, miller_id, metadata, intensities, uncertainties, mc_samples=1):
+        q = self.surrogate_posterior
         z = q.rsample((mc_samples,))
-        F = z[...,self.miller_id]
-        loc, scale = self.NN(self.metadata).T
+        F = z[...,miller_id]
+        loc, scale = self.NN(metadata).T
         scale = td.transform_to(td.constraints.positive)(scale)
         Sigma = td.Normal(loc, scale).rsample((mc_samples,))
-        log_likelihood = self.likelihood.log_prob(F * F * Sigma).sum()
-        log_p_z = torch.where(self.centric, self.p_centric.log_prob(z), self.p_acentric.log_prob(z))
+        log_likelihood = self.likelihood(intensities, uncertainties).log_prob(F * F * Sigma).sum()
+        log_p_z = self.prior.log_prob(z)
         log_q_z = q.log_prob(z)
         kl_div = (log_q_z - log_p_z).sum()
         return -log_likelihood + kl_div
 
-    def forward(self, mc_samples):
-        return self.minus_elbo(mc_samples)
+    def forward(self, miller_id, metadata, intensities, uncertainties, mc_samples=1):
+        return self.minus_elbo(miller_id, metadata, intensities, mc_samples)
 
-model = VariationalMergingModel(centric, multiplicity, miller_id, metadata, intensities, uncertainties, n_layers)
+#Construct variational distributions
+p = WilsonPrior(centric, multiplicity)
+q = FoldedNormalPosterior(p.mean, p.stddev)
+
+model = VariationalMergingModel(q, p, n_layers)
+
+#Move everything to the gpu
 model = model.cuda()
+miller_id = miller_id.cuda()
+metadata = metadata.cuda()
+intensities = intensities.cuda()
+uncertainties = uncertainties.cuda()
 
 #Train the model
 optimizer = torch.optim.Adam(model.parameters())
 
 for i in trange(steps):
     optimizer.zero_grad()
-    loss = model(mc_samples)
+    loss = model(miller_id, metadata, intensities, uncertainties, mc_samples)
     loss.backward()
     optimizer.step()
 
