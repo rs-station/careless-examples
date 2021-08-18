@@ -44,7 +44,7 @@ uncertainties = mtz[sigma_intensity_key].to_numpy(np.float32)
 # Below here is verbatim from the Careless manuscript
 ###############################################################################
 
-steps=1000
+steps=10000
 n_layers = 20
 mc_samples = 3
 p_centric  = tfd.HalfNormal(np.sqrt(multiplicity))
