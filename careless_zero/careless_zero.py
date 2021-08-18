@@ -6,6 +6,14 @@ import tensorflow as tf
 from tqdm import trange
 import numpy as np
 
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+except:
+    # Invalid device or cannot modify virtual devices once initialized.
+    pass
+
+
 inFN = "../hewl_ssad/unmerged.mtz"
 outFN = "careless_zero_out.mtz"
 
@@ -22,7 +30,7 @@ sigma_intensity_key = 'SIGIPR'
 
 mtz = rs.read_mtz(inFN).compute_dHKL().reset_index()
 mtz = mtz[~mtz.label_absences()['ABSENT']]
-mtz.loc[:,['Hasu','Kasu','Lasu']] = mtz.hkl_to_asu().loc[:,['H', 'K', 'L']]
+mtz.loc[:,['Hasu','Kasu','Lasu']] = mtz.hkl_to_asu().loc[:,['H', 'K', 'L']].to_numpy('int')
 mtz['miller_id'] = mtz.groupby(['Hasu', 'Kasu', 'Lasu']).ngroup()
 
 miller_id = mtz['miller_id'].to_numpy()
@@ -36,7 +44,7 @@ uncertainties = mtz[sigma_intensity_key].to_numpy(np.float32)
 # Below here is verbatim from the Careless manuscript
 ###############################################################################
 
-steps=10000
+steps=1000
 n_layers = 20
 mc_samples = 3
 p_centric  = tfd.HalfNormal(np.sqrt(multiplicity))
@@ -75,10 +83,15 @@ def minus_elbo():
     kl_div = tf.reduce_sum(log_q_z - log_p_z)
     return -log_likelihood + kl_div
 
-#Train the model
 optimizer = tf.keras.optimizers.Adam()
-for i in trange(steps):
+
+#Train the model
+@tf.function
+def step():
     optimizer.minimize(minus_elbo, [q.trainable_variables , NN.trainable_variables])
+
+for i in trange(steps):
+    step()
 
 #Export the results
 F,SigF = q.mean().numpy(), q.stddev().numpy()
@@ -87,6 +100,8 @@ F,SigF = q.mean().numpy(), q.stddev().numpy()
 # Above here is verbatim from the Careless manuscript
 ###############################################################################
 
+from IPython import embed
+embed()
 output = rs.DataSet({
     'H' : mtz.groupby('miller_id').first()['Hasu'].astype('H'),
     'K' : mtz.groupby('miller_id').first()['Kasu'].astype('H'),
