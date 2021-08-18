@@ -39,11 +39,6 @@ uncertainties = torch.FloatTensor(uncertainties)
 centric = torch.BoolTensor(centric)
 miller_id = torch.LongTensor(miller_id)
 
-
-###############################################################################
-# Below here is verbatim from the Careless manuscript
-###############################################################################
-
 steps=10000
 n_layers = 20
 mc_samples = 3
@@ -127,10 +122,6 @@ for i in trange(steps):
 
 #Export the results
 F,SigF = q.mean.detach().numpy(), q.stddev.detach().numpy()
-
-###############################################################################
-# Above here is verbatim from the Careless manuscript
-###############################################################################
 
 output = rs.DataSet({
     'H' : mtz.groupby('miller_id').first()['Hasu'].astype('H'),
