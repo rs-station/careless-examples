@@ -1,22 +1,25 @@
-mkdir merge 
+mkdir merge #First make an output directory
 careless mono \
-  --iterations=10000 \
-  --image-scale-key=BATCH \
-  --dmin=1.8 \
   --anomalous \
-  --learning-rate=0.001 \
-  "dHKL,BATCH,xobs,yobs" \
+  --merge-half-datasets \
+  --mlp-layers=10 \
+  --image-layers=2 \
+  --dmin=1.8 \
+  --iterations=30 \
+  "dHKL,xobs,yobs" \
   unmerged.mtz \
   merge/thermolysin
 
-mkdir merge_eo
+
+mkdir merge_eo #eo for Ewald offset
 careless mono \
-  --iterations=10000 \
-  --image-scale-key=BATCH \
-  --dmin=1.8 \
   --anomalous \
-  --learning-rate=0.001 \
-  "dHKL,BATCH,xobs,yobs,ewald_offset" \
+  --merge-half-datasets \
+  --mlp-layers=10 \
+  --image-layers=2 \
+  --dmin=1.8 \
+  --iterations=30 \
+  "dHKL,xobs,yobs,ewald_offset" \
   unmerged.mtz \
   merge_eo/thermolysin
 

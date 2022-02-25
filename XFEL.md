@@ -52,7 +52,7 @@ PARTIAL              bool
 dtype: object                                                                     
 ```
 
-This mtz has an extra column from the [stills2mtz](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz) script, `Ewald_offset`. 
+This mtz has an extra column from the [stills2mtz](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz) script, `ewald_offset`. 
 This contains the magnitude of the Ewald offset vector between the observed reflection centroids and their centroids in reciprocal space. 
 These are in a crystal-fixed cartesian [coordinate system](https://dials.github.io/documentation/conventions.html). 
 Because we're dealing with still images here, each of the reflections have partial intensities which are dictated by how far away from the ideal Bragg contition they fall. 
@@ -66,65 +66,46 @@ For the sake of comparison, let's first merge the data without the Ewald offsets
 ```bash
 mkdir merge #First make an output directory
 careless mono \
-  --iterations=10000 \
-  --image-scale-key=BATCH \
-  --dmin=1.8 \
   --anomalous \
-  --learning-rate=0.001 \
-  "dHKL,BATCH,xobs,yobs" \
+  --merge-half-datasets \
+  --mlp-layers=10 \
+  --image-layers=2 \
+  --dmin=1.8 \
+  --iterations=30_000 \
+  "dHKL,xobs,yobs" \
   unmerged.mtz \
   merge/thermolysin
 ```
 
-In this example we use the `--image-scale-key` flag. 
-This instructs `Careless` to add a linear scale parameter per image.
+In this example we use the `--image-layers` flag. 
+This instructs `Careless` to add 2 neural network layers per image.
 In single-crystal experiments, we can reasonably expect the scale to vary smoothly throughout a rotation series. 
 However, this is not the case with serial data, because each image originates from a separate crystal with its own inherent scattering power.
-We can overcome the intrinsic choppiness in the image scale function by assigning each image a linear scale factor. 
-XFEL beam intensities fluctuate much more than synchrotron sources so a per image scale may be warranted even for single-crystal XFEL experiments.
+We can overcome the intrinsic choppiness in the image scale function by learning separate neural network parameters for each image. 
+XFEL beam intensities fluctuate much more than synchrotron sources so a per image layers may be warranted even for single-crystal XFEL experiments.
 This is an open question for future work on variational merging.
-Regardless, it is worth noting that the per image scale factor breaks the global scale parameterization in the default careless implementation. 
+Regardless, it is worth noting that the per image layers break the global scale parameterization in the default careless implementation. 
 Luckily, it is easilly implemented and costs very little in terms of performance.
 This example also uses the `--dmin` flag to set the maximum resolution to 1.8 Å which is the published resolution of this data set.
 We use the `--anomalous` flag to indicate we would like to merge the Friedel mates separately.
 
-After this is finished running, reapeat the procedure wiht a new base directory and supply the metadata keys for the Ewald offsets `cartesian_delta_{x,y,z}`.
+After this is finished running, reapeat the procedure wiht a new base directory and supply the metadata keys for the Ewald offsets `"ewald_offset"`.
 
 ```bash
 mkdir merge_eo #eo for Ewald offset
 careless mono \
-  --iterations=10000 \
-  --image-scale-key=BATCH \
-  --dmin=1.8 \
   --anomalous \
-  --learning-rate=0.001 \
-  "dHKL,BATCH,xobs,yobs,ewald_offset" \
+  --merge-half-datasets \
+  --mlp-layers=10 \
+  --image-layers=2 \
+  --dmin=1.8 \
+  --iterations=30_000 \
+  "dHKL,xobs,yobs,ewald_offset" \
   unmerged.mtz \
-  merge_eov/thermolysin
+  merge_eo/thermolysin
 ```
 
-
-we can have a look at the half data set correlations and assess the quality of the merging. 
-Careless ships with a small script for this. To run it call
-
-```bash
-ccplot merge/thermolysin_half1_0.mtz merge/thermolysin_half2_0.mtz
-```
-
-for the first results and 
-```bash
-ccplot merge_eov/thermolysin_half1_0.mtz merge_eov/thermolysin_half2_0.mtz
-```
-for the second. You will most likely notice that the half data set correlations are much better when ewald offsets are supplied. 
-
-
-
-| Without Ewald Offset | With Ewald Offset |
-|------------------------------|---------------------------|
-|![ccplot](images/xfel_ccplot.png) |![ccplot](images/xfel_eo_ccplot.png)  |
-
-
-No we can use the reference structure, [2tli](https://www.rcsb.org/structure/2TLI), to make a map with PHENIX.
+Now we can use the reference structure, [2tli](https://www.rcsb.org/structure/2TLI), to make a map with PHENIX.
 There is a refinement script prepared for this. 
 
 ```bash
