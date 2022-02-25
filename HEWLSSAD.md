@@ -72,9 +72,10 @@ First make an output directory and then call `careless`
 ```bash
 mkdir -p merge/normal
 careless mono \
-    --sequential-layers=20 \
-    --anomalous \
-    --iterations=10000 \
+    --anomalous  \
+    --disable-image-scales \
+    --merge-half-datasets \
+    --iterations=$steps  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \
     unmerged.mtz \
     merge/normal/hewl
@@ -119,9 +120,10 @@ That has already been done for this data set, and we know that a value of 16 off
 mkdir -p merge/studentt
 careless mono \
     --studentt-likelihood-dof=16 \
-    --sequential-layers=20 \
-    --anomalous \
-    --iterations=10000 \
+    --anomalous  \
+    --disable-image-scales \
+    --merge-half-datasets \
+    --iterations=$steps  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \
     unmerged.mtz \
     merge/studentt/hewl
