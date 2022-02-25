@@ -8,7 +8,6 @@ mkdir -p merge/normal
 careless mono \
     --anomalous  \
     --disable-image-scales \
-    --merge-half-datasets \
     --iterations=30_000  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \
     unmerged.mtz \
@@ -21,7 +20,6 @@ careless mono \
     --studentt-likelihood-dof=16 \
     --anomalous  \
     --disable-image-scales \
-    --merge-half-datasets \
     --iterations=30_000  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \
     unmerged.mtz \

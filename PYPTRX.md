@@ -78,7 +78,6 @@ careless poly \
   --separate-files \
   --disable-image-scales \
   --iterations=30_000 \
-  --merge-half-datasets \
   --wavelength-key='Wavelength' \
   "X,Y,Wavelength,dHKL,Hobs,Kobs,Lobs" \
   off.mtz \
@@ -99,17 +98,9 @@ On a powerful CPU, it will likely take about 10 minutes.
 However, with a relatively recent NVIDIA GPU it will take just a few minutes. 
 Once it is completed, the output files will appear in the `merge/` directory. 
 The output will begin with the base filename supplied as the last argument to careless. 
-There will be three files for each input mtz. 
 
 - pyp_0.mtz - merged data from the first mtz (off.mtz)
 - pyp_1.mtz - merged data from the second mtz (2ms.mtz)
-- pyp_half1_0.mtz - merged data from the first mtz and first half data set
-- pyp_half1_1.mtz - merged data from the second mtz and first half data set
-- pyp_half2_0.mtz - merged data from the first mtz and second half data set
-- pyp_half2_1.mtz - merged data from the second mtz and second half data set
-- pyp_losses.npy  - loss function values for the full data set
-- pyp_half1_losses.mtz - loss function values for the first half data set
-- pyp_half2_losses.mtz - loss function values for the second half data set
 
 To make a difference map from these data, we first need to refine the dark data. 
 
