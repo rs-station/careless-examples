@@ -89,22 +89,6 @@ It will take longer on a cpu.
 
 After merging, the `merge/normal` will contain several output Mtzs. 
 `merge/normal/hewl_0.mtz` contains the full set of merged structure factors. 
-The output will also contain two mtz files from merging half datasets, `merge/normal/hewl_half{1,2}_0.mtz`.
-To assess data quality, we can have a look at the half data set correlations between these. 
-To plot the half data set correlations, type
-
-```bash
-ccplot merge/normal/hewl_half1_0.mtz merge/normal/hewl_half2_0.mtz
-```
-
-You should see a scatter plot of the half data sets as well as the resolution dependent correlation coefficients.
-You can also check out the anomalous differences with:
-
-```bash
-ccanom_plot merge/normal/hewl_half1_0.mtz merge/normal/hewl_half2_0.mtz
-```
-
-![Normal CCanom](images/normal_ccanom.png)
 
 ### Merging with t-distributed errors
 To merge using a robust error model, all that needs to be done is to add the `--studentt-likelihood-dof` flag when calling careless.
@@ -128,16 +112,6 @@ careless mono \
     unmerged.mtz \
     merge/studentt/hewl
 ```
-
-Again, have a look at the `ccanom_plot`
-```bash
-ccanom_plot merge/studentt/hewl_half1_0.mtz merge/studentt/hewl_half2_0.mtz
-```
-
-The signal is notably higher at low resolution. 
-
-![T-Distributed CCanom](images/studentt_ccanom.png)
-
 
 
 ### Making experimental maps with AutoSol
