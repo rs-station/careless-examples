@@ -67,7 +67,6 @@ For the sake of comparison, let's first merge the data without the Ewald offsets
 mkdir merge #First make an output directory
 careless mono \
   --anomalous \
-  --merge-half-datasets \
   --mlp-layers=10 \
   --image-layers=2 \
   --dmin=1.8 \
@@ -95,7 +94,6 @@ After this is finished running, reapeat the procedure wiht a new base directory 
 mkdir merge_eo #eo for Ewald offset
 careless mono \
   --anomalous \
-  --merge-half-datasets \
   --mlp-layers=10 \
   --image-layers=2 \
   --dmin=1.8 \
