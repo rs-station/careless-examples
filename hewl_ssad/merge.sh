@@ -9,7 +9,7 @@ careless mono \
     --anomalous  \
     --disable-image-scales \
     --merge-half-datasets \
-    --iterations=$steps  \
+    --iterations=30_000  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \
     unmerged.mtz \
     merge/normal/hewl
@@ -22,7 +22,7 @@ careless mono \
     --anomalous  \
     --disable-image-scales \
     --merge-half-datasets \
-    --iterations=$steps  \
+    --iterations=30_000  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \
     unmerged.mtz \
     merge/studentt/hewl
