@@ -76,9 +76,11 @@ Now that we have identified the metadata keys we want to use, we can create an o
 mkdir merge
 careless poly \
   --separate-files \
-  --iterations=10000 \
+  --disable-image-scales \
+  --iterations=30_000 \
+  --merge-half-datasets \
   --wavelength-key='Wavelength' \
-  "X,Y,Wavelength,BATCH,dHKL,Hobs,Kobs,Lobs" \
+  "X,Y,Wavelength,dHKL,Hobs,Kobs,Lobs" \
   off.mtz \
   2ms.mtz \
   merge/pyp

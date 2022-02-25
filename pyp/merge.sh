@@ -5,11 +5,11 @@ mkdir $out
 
 careless poly \
   --separate-files \
-  --sequential-layers=20 \
-  --iterations=10000 \
-  --learning-rate=0.001 \
+  --disable-image-scales \
+  --iterations=30_000 \
+  --merge-half-datasets \
   --wavelength-key='Wavelength' \
-  "X,Y,Wavelength,BATCH,dHKL,Hobs,Kobs,Lobs" \
+  "X,Y,Wavelength,dHKL,Hobs,Kobs,Lobs" \
   $mtz_0 \
   $mtz_1 \
   $out/pyp
