@@ -1,6 +1,6 @@
 # careless-examples
 Examples accompanying the [`careless`](https://github.com/hekstra-lab/careless) [preprint](https://doi.org/10.1101/2021.01.05.425510). 
-These examples have been tested against `careless` version 0.2.0. 
+These examples have been tested against `careless` release version 0.2.0. 
 
 ## Installation
 If you haven't already, follow the instructions on the [readme](https://github.com/hekstra-lab/careless) to install `careless`.
