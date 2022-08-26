@@ -44,7 +44,7 @@ to merge the Friedel mates separately using the scales from (1). The `--freeze-s
 constant during merging. 
 
 ### Analysis of output
-To generate the anomalous omit map referenced in the appendix, use the following command:
+To generate the anomalous omit map referenced in the appendix of the careless manuscript, use the following command:
 
 ```
 mkdir phenix_omit
