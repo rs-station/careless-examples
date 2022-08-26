@@ -11,6 +11,7 @@ or [download](https://github.com/Hekstra-Lab/careless-examples/archive/main.zip)
 
 ## Examples
 - [room temp SAD phasing for lysozyme](HEWLSSAD.md)
+- [Boosting SAD signal with transfer learning](TRANSFER_ANOM.md)
 - [time resolved differences in photoactive yellow protein](PYPTRX.md)
 - [merging serial crystallography from a free electron laser](XFEL.md)
 - For a barebones implementation of the careless model, have a look at [careless_zero](CARELESS_ZERO.md)
