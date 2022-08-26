@@ -51,3 +51,4 @@ mkdir phenix_omit
 phenix.refine refine_omit.eff anom/hewl_0.mtz
 ```
 
+This will create refinement results in `phenix_omit` which you can inspect with coot. 
