@@ -3,7 +3,7 @@
 The data in `careless-examples/thermolysin_xfel` are serial crystallography data from thermolysin microcrystals. 
 The parent experiment of these data is freely available at the [CXIDB](https://cxidb.org/id-81.html). 
 Because the original data set is very large, this example deals with a single run containing 3,160 images.
-The unmerged reflections, stored in `careless-examples/thermolysin_xfel/unmerged.mtz` were prepared with a custom `cctbx` [script](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz). 
+The unmerged reflections, stored in `careless-examples/thermolysin_xfel/unmerged.mtz` were prepared with a custom `cctbx` [script](https://github.com/rs-station/careless/blob/master/scripts/stills2mtz). 
 
 
 Enter the thermolysin directory and use [reciprocalspaceship](https://github.com/hekstra-lab/reciprocalspaceship) to explore the contents of this mtz file. 
@@ -52,7 +52,7 @@ PARTIAL              bool
 dtype: object                                                                     
 ```
 
-This mtz has an extra column from the [stills2mtz](https://github.com/Hekstra-Lab/careless/blob/master/scripts/stills2mtz) script, `ewald_offset`. 
+This mtz has an extra column from the [stills2mtz](https://github.com/rs-station/careless/blob/master/scripts/stills2mtz) script, `ewald_offset`. 
 This contains the magnitude of the Ewald offset vector between the observed reflection centroids and their centroids in reciprocal space. 
 These are in a crystal-fixed cartesian [coordinate system](https://dials.github.io/documentation/conventions.html). 
 Because we're dealing with still images here, each of the reflections have partial intensities which are dictated by how far away from the ideal Bragg contition they fall. 

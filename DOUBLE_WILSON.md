@@ -1,9 +1,9 @@
 ### Using a bivariate prior to exploit correlations between Friedel mates
 
-In the example [“Merging serial crystallography from a free electron laser“](https://github.com/Hekstra-Lab/careless-examples/blob/main/XFEL.md), we see that Careless can extract anomalous signal from XFEL data. 
+In the example [“Merging serial crystallography from a free electron laser“](https://github.com/rs-station/careless-examples/blob/main/XFEL.md), we see that Careless can extract anomalous signal from XFEL data. 
 By default, Careless uses univariate priors (the Wilson distribution) for each structure factor amplitude. 
 In practice, however, there are many instances where we expect pairs of structure factor amplitudes to be highly similar. 
-In the example [“Boosting SAD signal with transfer learning”](https://github.com/Hekstra-Lab/careless-examples/blob/main/TRANSFER_ANOM.md), we took advantage of this by preprocessing Friedel mates under the assumption that their values were, in fact, identical. 
+In the example [“Boosting SAD signal with transfer learning”](https://github.com/rs-station/careless-examples/blob/main/TRANSFER_ANOM.md), we took advantage of this by preprocessing Friedel mates under the assumption that their values were, in fact, identical. 
 We can relax this assumption by, instead, assuming a certain degree of correlation between their true values.
 
 We have implemented a capability to use multivariate priors in Careless. 
@@ -24,7 +24,7 @@ to create two files,
  - `friedel_minus.mtz`
 
 ### Merge with the Double-Wilson prior
-We then call Careless, with a few modifications relative to the [XFEL example](https://github.com/Hekstra-Lab/careless-examples/blob/main/XFEL.md). Specifically, 
+We then call Careless, with a few modifications relative to the [XFEL example](https://github.com/rs-station/careless-examples/blob/main/XFEL.md). Specifically, 
 
  1) we need to specify the statistical dependencies between the input MTZs:
 `--double-wilson-parents=None,0` 

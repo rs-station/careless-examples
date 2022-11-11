@@ -1,14 +1,14 @@
 # careless-examples
-Examples accompanying the [`careless`](https://github.com/hekstra-lab/careless) [preprint](https://doi.org/10.1101/2021.01.05.425510). 
+Examples accompanying the [`careless`](https://github.com/rs-station/careless) [preprint](https://doi.org/10.1101/2021.01.05.425510). 
 These examples have been tested against `careless` release version 0.2.0. 
 
 ## Installation
-If you haven't already, follow the instructions on the [readme](https://github.com/hekstra-lab/careless) to install `careless`.
+If you haven't already, follow the instructions on the [readme](https://github.com/rs-station/careless) to install `careless`.
 To download the examples, run
 ```bash
-git clone https://github.com/Hekstra-Lab/careless-examples
+git clone https://github.com/rs-station/careless-examples
 ```
-or [download](https://github.com/Hekstra-Lab/careless-examples/archive/main.zip) the examples as a `.zip` archive.
+or [download](https://github.com/rs-station/careless-examples/archive/main.zip) the examples as a `.zip` archive.
 
 ## Examples
 Examples from the careless manuscript:
