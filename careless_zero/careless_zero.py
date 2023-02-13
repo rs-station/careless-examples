@@ -22,7 +22,8 @@ sigma_intensity_key = 'SIGIPR'
 
 mtz = rs.read_mtz(inFN).compute_dHKL().reset_index()
 mtz = mtz[~mtz.label_absences()['ABSENT']]
-mtz.loc[:,['Hasu','Kasu','Lasu']] = mtz.hkl_to_asu().loc[:,['H', 'K', 'L']]
+
+mtz['Hasu'],mtz['Kasu'],mtz['Lasu'] = mtz.hkl_to_asu().get_hkls().T
 mtz['miller_id'] = mtz.groupby(['Hasu', 'Kasu', 'Lasu']).ngroup()
 
 miller_id = mtz['miller_id'].to_numpy()
@@ -36,7 +37,7 @@ uncertainties = mtz[sigma_intensity_key].to_numpy(np.float32)
 # Below here is verbatim from the Careless manuscript
 ###############################################################################
 
-steps=10000
+steps=10_000
 n_layers = 20
 mc_samples = 3
 p_centric  = tfd.HalfNormal(np.sqrt(multiplicity))
@@ -77,8 +78,9 @@ def minus_elbo():
 
 #Train the model
 optimizer = tf.keras.optimizers.Adam()
+weights = tuple(q.trainable_variables) + tuple(NN.trainable_variables)
 for i in trange(steps):
-    optimizer.minimize(minus_elbo, [q.trainable_variables , NN.trainable_variables])
+    optimizer.minimize(minus_elbo, weights)
 
 #Export the results
 F,SigF = q.mean().numpy(), q.stddev().numpy()
