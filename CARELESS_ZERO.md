@@ -3,7 +3,7 @@
 The implementation of variational scaling inside of Careless is a tad convoluted, because it is designed for flexibility. 
 For those users that want to know more about how Careless actually works, but don't care to sift through the actual source, I've provided this super minimalist [implementation](careless_zero/careless_zero.py) in 100 lines of python. 
 
-The script merges X-ray data using [reciprocalspaceship](https://github.com/hekstra-lab/reciprocalspaceship) for data i/o and [tensorflow_probability](https://www.tensorflow.org/probability) for probabilistic programming.
+The script merges X-ray data using [reciprocalspaceship](https://github.com/rs-station/reciprocalspaceship) for data i/o and [tensorflow_probability](https://www.tensorflow.org/probability) for probabilistic programming.
 `careless_zero.py` inplements the default Careless model and uses it to merge the lysozyme SAD [data set](HEWLSSAD.md).
 To run the script, first enter the careless zero directory,
 

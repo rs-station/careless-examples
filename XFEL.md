@@ -6,7 +6,7 @@ Because the original data set is very large, this example deals with a single ru
 The unmerged reflections, stored in `careless-examples/thermolysin_xfel/unmerged.mtz` were prepared with a custom `cctbx` [script](https://github.com/rs-station/careless/blob/master/scripts/stills2mtz). 
 
 
-Enter the thermolysin directory and use [reciprocalspaceship](https://github.com/hekstra-lab/reciprocalspaceship) to explore the contents of this mtz file. 
+Enter the thermolysin directory and use [reciprocalspaceship](https://github.com/rs-station/reciprocalspaceship) to explore the contents of this mtz file. 
 
 ```bash
 cd careless-examples/thermolysin_xfel

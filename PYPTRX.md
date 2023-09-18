@@ -19,7 +19,7 @@ You will see the following items:
  - reference_data/off.pdb (Atomic model of the ground state)
 
 Because we will have to supply metadata from the mtz files, let's first have  look at what is inside them.
-This can be easily done with a command line script supplied by [ReciprocalSpaceship](https://hekstra-lab.github.io/reciprocalspaceship/) which will have been installed when you installed `Careless`. Type `rs.mtzdump off.mtz`; you should something like the following output. 
+This can be easily done with a command line script supplied by [ReciprocalSpaceship](https://rs-station.github.io/reciprocalspaceship/) which will have been installed when you installed `Careless`. Type `rs.mtzdump off.mtz`; you should something like the following output. 
 
 ```
 Spacegroup: P63
