@@ -122,10 +122,16 @@ You can quickly find the chromophore by pressing `ctrl-l`.
 
 ![2fo-fc map](images/pyp-2fo-fc.gif)
 
-Making a difference map using `make_difference_map`. Run the following
+Making a difference map using `rs.diffmap`. First install [rs-booster](https://github.com/rs-station/rs-booster) if it isn't already installed.
 
 ```bash
-make_difference_map merge/pyp_0.mtz merge/pyp_1.mtz phenix/PYP_refine_1.mtz
+pip install rs-booster
+```
+
+Run the following
+
+```bash
+rs.diffmap -off merge/pyp_0.mtz F SigF -on merge/pyp_1.mtz F SigF -r phenix/PYP_refine_1.mtz PHIF-model -o difference.mtz
 ```
 
 which will generate `difference.mtz`. 
