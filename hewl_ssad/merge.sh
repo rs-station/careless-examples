@@ -7,6 +7,8 @@ mkdir -p merge/normal
 
 careless mono \
     --anomalous  \
+    --beta-1=0.9 \
+    --beta-2=0.9 \
     --disable-image-scales \
     --iterations=30_000  \
     "BATCH,dHKL,Hobs,Kobs,Lobs,XDET,YDET,BG,SIGBG,LP,QE,FRACTIONCALC" \

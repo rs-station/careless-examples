@@ -8,7 +8,6 @@ refinement {
       file_name = "reference_data/off.pdb"
     }
     xray_data {
-      file_name = merge/pyp_0.mtz
       labels = F,SigF
       outliers_rejection = True
       french_wilson_scale = False
