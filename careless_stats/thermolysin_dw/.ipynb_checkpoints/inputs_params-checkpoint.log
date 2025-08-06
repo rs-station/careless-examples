@@ -1,2 +1,0 @@
-Input MTZs: ../unmerged_mtzs/friedel_plus.mtz ../unmerged_mtzs/friedel_minus.mtz
-Args: mono --mc-samples=1 --learning-rate=0.001 --separate-files --merge-half-datasets --half-dataset-repeats=3 --mlp-layers=10 --image-layers=2 --dmin=1.8 --iterations=30_000 --test-fraction=0.1 --seed=3864 --mlp-width=4 --double-wilson-parents=None,0 --double-wilson-r=0.,0.9961 --refine-uncertainties --studentt-likelihood-dof=32 dHKL,xobs,yobs,ewald_offset
