@@ -1,5 +1,0 @@
-,file,Resolution Range (Å),bin,test,Spacegroup,CCpred
-0,thl_1p8A_grid_predictions_0.mtz,34.35 - 1.80,0,Train,P 61 2 2,0.87096334
-1,thl_1p8A_grid_predictions_0.mtz,34.35 - 1.80,0,Test,P 61 2 2,0.8595673
-2,thl_1p8A_grid_predictions_1.mtz,34.35 - 1.80,0,Train,P 61 2 2,0.8835716
-3,thl_1p8A_grid_predictions_1.mtz,34.35 - 1.80,0,Test,P 61 2 2,0.8694514

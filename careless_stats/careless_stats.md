@@ -14,7 +14,7 @@ This notebook describes all the machine learning and data crossvalidation metric
 `careless.stats` also computes standard crystallography statistics, such as completeness and $I/\sigma(I)$. 
 
 ```
->careless.completeness ./thermolysin_dw/thl_1p8A_grid_both.mtz -o ./thermolysin_dw/completeness.csv -b 10
+careless.completeness ./thermolysin_dw/thl_1p8A_grid_both.mtz -o ./thermolysin_dw/completeness.csv -b 10
 ```
 ![image](./thermolysin_dw/completeness.png)
 
@@ -124,7 +124,7 @@ plt.show()
 We see that the loss goes down over the 30000 steps of training. This loss is smooth. If the loss is jagged, then I advise increasing `--mc-samples` for smoother training. Training takes about 17.5 minutes as according to the below log:
 
 ``` 
-> head -c 16k ./thermolysin_dw/myoutput_19756592.err
+head -c 16k ./thermolysin_dw/myoutput_19756592.err
 
 Training:   0%|                                                                                               | 0/30000 [00:00<?, ?it/s]WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
 I0000 00:00:1707949336.689264 1893395 device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
