@@ -14,18 +14,33 @@ This notebook describes all the machine learning and data crossvalidation metric
 `careless.stats` also computes standard crystallography statistics, such as completeness and $I/\sigma(I)$. 
 
 ```
-careless.completeness ./thermolysin_dw/thl_1p8A_grid_both.mtz -o ./thermolysin_dw/completeness.csv -b 10
+careless.completeness ./thermolysin_dw/thl_1p8A_grid_both.mtz -i ./thermolysin_dw/completeness.png -b 10 > ./thermolysin_dw/completeness.txt
 ```
 ![image](./thermolysin_dw/completeness.png)
 
-Now, in python: 
 ```
-pd.read_csv("./thermolysin_dw/completeness.csv")
+cat ./thermolysin_dw/completeness.txt
 ```
-![image](./thermolysin_dw/pd_completeness.png)
+
+```
+Resolution Range (Å)      all  non-anomalous  anomalous
+             overall 0.983983       0.984726   0.983116
+        34.35 - 4.01 1.000000       1.000000   1.000000
+         4.01 - 3.15 1.000000       1.000000   1.000000
+         3.15 - 2.73 1.000000       1.000000   1.000000
+         2.73 - 2.48 1.000000       1.000000   1.000000
+         2.48 - 2.29 0.999829       0.999680   1.000000
+         2.29 - 2.16 1.000000       1.000000   1.000000
+         2.16 - 2.04 0.999661       0.999680   0.999640
+         2.04 - 1.95 0.995282       0.995543   0.994989
+         1.95 - 1.87 0.977730       0.978411   0.976971
+         1.87 - 1.80 0.883811       0.886589   0.880719
+
+```
 
 The completeness of the last resolution bin is 0.88, and the overall completeness is 0.984. 
 
+### $\text{I}/\sigma \text{I}$
 ```careless.isigi ./thermolysin_dw/thl_1p8A_grid_xval_[0-1].mtz --intensity-key I --uncertainty-key SigI -i ./thermolysin_dw/isigi.png -b 10```
 
 ![image](./thermolysin_dw/isigi.png)
@@ -99,51 +114,21 @@ The above plot displays the CCpred for each image. Images with low CCpred are ei
 
 `careless` is a package for scaling and merging crystallographic data using variational inference. Every time I process a dataset using `careless`, I will learn the distribution of the structure factor amplitudes and the scales for each miller index, given the intensity of each observed reflection in the input dataset. The scale function is implemented as a neural network, whose parameters are optimized by minimizing an objective function ('loss'). 
 
-```
-import careless.stats
-import matplotlib.pyplot as plt
-import pandas as pd
-
-training_metrics = pd.read_csv("./thermolysin_dw/thl_1p8A_grid_history.csv")
-training_metrics.plot(x="step",y="loss", loglog=True)
-plt.savefig("./thermolysin_dw/loss.png")
-plt.show()
-
-plt.clf()
-
-fig,ax = plt.subplots()
-training_metrics.plot(x="step",y="NLL", ax=ax,loglog=True)
-training_metrics.plot(x="step",y="NLL_val", ax=ax, loglog=True)
-training_metrics.plot(x="step",y="F KLDiv", ax=ax, loglog=True)
-plt.savefig("./thermolysin_dw/loss_components.png")
-plt.show()
-```
-![image](./thermolysin_dw/loss.png)
-
-
-We see that the loss goes down over the 30000 steps of training. This loss is smooth. If the loss is jagged, then I advise increasing `--mc-samples` for smoother training. Training takes about 17.5 minutes as according to the below log:
-
-``` 
-head -c 16k ./thermolysin_dw/myoutput_19756592.err
-
-Training:   0%|                                                                                               | 0/30000 [00:00<?, ?it/s]WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1707949336.689264 1893395 device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
-Training:   0%| | 92/30000 [00:15<17:11, 29.01it/s, Grad Norm=1.08e+07, loss=3.59e+07, F KLDiv=1.28e+06, NLL=3.47e+07, NLL_val=3.48e+07]
-```
-
-This is the careless training log, which, at each step, reports all the machine learning metrics. We will go through most of these metrics now. 
-
 Our objective function is the standard ELBO, whose negative we minimize:
 $${{{{{{{-\rm{ELBO}}}}}}}}\left(q\right)={-{\mathbb{E}}}_{q}\left[\log p(I|F,{{\Sigma }})\right]+{D}_{KL}\left({q}_{F}\parallel p(F)\right) $$
 
-The first term on the right-hand side is the negative log likelihood (NLL), which represents the degree to which the structure factors faithfully represent the experimental intensities. The secod term is the Kullback-Liebler divergence between the variational distribution on the structure factor amplitudes, and a prior distribution. This term measures the similarity of two distributions that is minimal (zero) when the two are identical. We now plot the NLL, KL divergence (KLDiv), and the NLL_val, which is the NLL on a held-out validation set of reflections (the fraction of the data for which we can specify by `--test-fraction`. I typically choose `--test-fraction=0.1`. 
+The first term on the right-hand side is the negative log likelihood (NLL), which represents the degree to which the structure factors faithfully represent the experimental intensities. The secod term is the Kullback-Liebler divergence between the variational distribution on the structure factor amplitudes, and a prior distribution. This term measures the similarity of two distributions that is minimal (zero) when the two are identical. We now plot the NLL, KL divergence (KLDiv), and the NLL_val, which is the NLL on a held-out validation set of reflections (the fraction of the data for which we can specify by `--test-fraction`. The default is `--test-fraction=0.1`. 
+
+`careless.plot_history -s ./thermolysin_dw/thl_1p8A_grid_history.csv --show`
+![image](./thermolysin_dw/thl_plot_history.png)
+
+This plot is interactive in the matplotlib GUI. The NLL and NLL_val are almost identical, indicating minimal overfitting, and both go down, indicating that the the neural network is learning the scales and structure factor amplitudes. The KLDiv actually goes down, as the structured prior introduced by the double-Wilson distribution is initially distinct from the factorized prior. 
+
+All these statistics can also be visualized with `pandas` in a python environment: 
+
+`pd.read_csv(./thermolysin_dw/thl_1p8A_grid_history.csv)
+...
+`
 
 ![image](./thermolysin_dw/loss_components.png)
 
-The NLL and NLL_val are almost identical, indicating minimal overfitting, and both go down, indicating that the the neural network is learning the scales and structure factor amplitudes. The KLDiv actually goes down, as the structured prior introduced by the double-Wilson distribution is initially distinct from the factorized prior. 
-
-All these statistics can also be visualized with the command line: 
-
-`careless.plot_history -s ./thermolysin_dw/thl_1p8A_grid_history.csv -o ./thermolysin_dw/thl_plot_history.png`
-
-![image](./thermolysin_dw/thl_plot_history.png)
