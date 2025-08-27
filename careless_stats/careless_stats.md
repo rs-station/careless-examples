@@ -14,8 +14,11 @@ This notebook describes all the machine learning and data crossvalidation metric
 `careless.stats` also computes standard crystallography statistics, such as completeness and $I/\sigma(I)$. 
 
 ```
-careless.completeness ./thermolysin_dw/thl_1p8A_grid_both.mtz -i ./thermolysin_dw/completeness.png -b 10 > ./thermolysin_dw/completeness.txt
+careless.completeness ./thermolysin_dw/thl_1p8A_grid_both.mtz -i ./thermolysin_dw/completeness.png -b 10 --show > ./thermolysin_dw/completeness.txt
 ```
+In addition to saving the plot as a png using the `-i` flag, the `--show` flag allows interactive visualization of the plot in the `matplotlib` GUI. The `--show` flag can be applied to all subsequent plots. 
+
+
 ![image](./thermolysin_dw/completeness.png)
 
 ```
@@ -41,7 +44,7 @@ Resolution Range (Å)      all  non-anomalous  anomalous
 The completeness of the last resolution bin is 0.88, and the overall completeness is 0.984. 
 
 ### $\text{I}/\sigma \text{I}$
-```careless.isigi ./thermolysin_dw/thl_1p8A_grid_xval_[0-1].mtz --intensity-key I --uncertainty-key SigI -i ./thermolysin_dw/isigi.png -b 10```
+```careless.isigi ./thermolysin_dw/thl_1p8A_grid_xval_[0-1].mtz --intensity-key I --uncertainty-key SigI -i ./thermolysin_dw/isigi.png -b 10 --show```
 
 ![image](./thermolysin_dw/isigi.png)
 
@@ -56,7 +59,7 @@ Careless provides several validation statistics that may help validate the quali
 
 ```
 careless.ccpred ./thermolysin_dw/thl_1p8A_grid_predictions_[0-1].mtz -o ./thermolysin_dw/ccpred_res.csv \
---image ./thermolysin_dw/ccpred_careless.png -b 10 -m spearman -l 0.5 1.1 \
+--image ./thermolysin_dw/ccpred_careless.png -b 10 -m spearman -l 0.5 1.1 --show\
 ```
 
 The raw plot from the above shell command is reproduced below. 
@@ -71,7 +74,7 @@ Careless can provide estimates of the $CC_\text{1/2}$, the half-data-set correla
 
 ```
 careless.cchalf ./thermolysin_dw/*xval_both.mtz -o ./thermolysin_dw/cchalf_res.csv \
- -i ./thermolysin_dw/cchalf_res.png -b 10 -m spearman -l 0. 1. \
+ -i ./thermolysin_dw/cchalf_res.png -b 10 -m spearman -l 0. 1. --show \
  ```
 
 ![image](./thermolysin_dw/cchalf_res.png)
@@ -84,7 +87,7 @@ For anomalous datasets, we may estimate the half-dataset correlation of the anom
 
 ```
 careless.ccanom ./thermolysin_dw/*xval_both.mtz -o ./thermolysin_dw/ccanom_res.csv \
---image ./thermolysin_dw/ccanom_res.png -b 10 -l 0. 0.3
+--image ./thermolysin_dw/ccanom_res.png -b 10 -l 0. 0.3 --show
 ```
 
 The $CC_\text{anom}$ is not expected to be large, and expected to decrease as a function of resolution. We observe some high-resolution tailing in datasets merged with a bivariate prior on the input structure factors. This is due to numerical issues that have been fixed not during the processing of this dataset but by `careless 0.4.9`. 
@@ -93,7 +96,7 @@ The $CC_\text{anom}$ is not expected to be large, and expected to decrease as a 
 
 The $R_\text{split}$ is a crossvalidation metric for serial crystallography data and is described in White et al. 2012. The data are split in half and then the degree to which the half-datasets agree is quantified per resolution bin. 
 ```
-careless.rsplit ./thermolysin_dw/*xval_both.mtz -o ./thermolysin_dw/rsplit_res.csv --image ./thermolysin_dw/rsplit_res.png -b 10 -l 0 0.3
+careless.rsplit ./thermolysin_dw/*xval_both.mtz -o ./thermolysin_dw/rsplit_res.csv --image ./thermolysin_dw/rsplit_res.png -b 10 -l 0 0.3 --show
 ```
 ![image](./thermolysin_dw/rsplit_res.png)
 
@@ -102,7 +105,7 @@ A lower $R_\text{split}$ is better.
 ### Image $CC_\text{pred}$
 ```
 careless.image_ccpred ./thermolysin_dw/thl_1p8A_grid_predictions_[0-1].mtz -o ./thermolysin_dw/imagecc_res.csv \
---image ./thermolysin_dw/imagecc_careless.png -m weighted -l 0. 1.1
+--image ./thermolysin_dw/imagecc_careless.png -m weighted -l 0. 1.1 --show
 ```
 
 ![image](./thermolysin_dw/imagecc_careless.png)
