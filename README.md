@@ -1,6 +1,8 @@
 # careless-examples
-Examples accompanying the [`careless`](https://github.com/rs-station/careless) [preprint](https://doi.org/10.1101/2021.01.05.425510). 
+Examples accompanying the [`careless`](https://github.com/rs-station/careless) [paper](https://www.nature.com/articles/s41467-022-35280-8). 
 These examples have been tested against `careless` release version 0.2.0. 
+
+Examples accompanying our [2025 Science Advances paper](https://www.science.org/doi/full/10.1126/sciadv.adj2921) on the use of multivariate priors with `careless` can be found at the [dw-examples repo](https://github.com/Hekstra-Lab/dw-examples).
 
 ## Installation
 If you haven't already, follow the instructions on the [readme](https://github.com/rs-station/careless) to install `careless`.
